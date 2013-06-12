@@ -16,6 +16,35 @@
   </style>
 </head>
 <body>
+  <script>
+(function(){
+
+  // prepare base perf object
+  if (typeof window.performance === 'undefined') {
+      window.performance = {};
+  }
+
+  if (!window.performance.now){
+
+    var nowOffset = Date.now();
+
+    if (performance.timing && performance.timing){
+      nowOffset = performance.timing.navigationStart
+    }
+    window.performance.now = function now(){
+      return Date.now() - nowOffset;
+    }
+
+  }
+
+  if (window.MozCSSKeyframesRule && !window.MozCSSKeyframesRule.prototype.insertRule) {
+    window.MozCSSKeyframesRule.prototype.insertRule = window.MozCSSKeyframesRule.prototype.appendRule;
+  } else if (window.CSSKeyframesRule && !window.CSSKeyframesRule.prototype.insertRule) {
+    window.CSSKeyframesRule.prototype.insertRule = window.CSSKeyframesRule.prototype.appendRule;
+  }
+
+})();
+  </script>
   <script type="application/dart" src="simple.dart"></script>
   <script src="packages/browser/dart.js"></script>
 </body>

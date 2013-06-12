@@ -7,31 +7,44 @@ import 'dart:html';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_config.dart';
 import 'package:anim8/anim8.dart';
+import 'package:anim8/src/script.dart';
+import 'package:anim8/src/css.dart';
 
 main() {
   useHtmlConfiguration();
 
-  var e = new DivElement();
-  e.style.width = '100px';
-  e.style.height = '100px';
-  e.style.backgroundColor = 'red';
+  var e2 = new DivElement();
+  e2.style.width = '20px';
+  e2.style.height = '100px';
+  e2.style.backgroundColor = 'blue';
+  document.body.append(e2);
 
-  document.body.append(e);
+  var anim2 = new ScriptAnimation();
+  animate(e2, anim2);
 
-  var anim = new Animation();
+  var e1 = new DivElement();
+  e1.style.width = '20px';
+  e1.style.height = '100px';
+  e1.style.backgroundColor = 'red';
+  document.body.append(e1);
+
+  var anim1 = new CssAnimation();
+  animate(e1, anim1);
+}
+
+void animate(Element target, Animation anim) {
   anim.addFrame(.5)
-    ..marginLeft = '100px';
+    ..translateX = 500
+    ..opacity = .5;
   anim.addFrame(1.0)
-    ..marginLeft = '0px';
+    ..translateX = 0
+    ..opacity = 1;
 
-  anim.start(e, new Duration(seconds: 3)).onEnd.then((_) {
-    print('done!');
 
-    anim.start(e, new Duration(seconds: 2));
-  });
-
-  var anim2 = new Animation();
-  anim2.addFrame(.5).opacity = '.2';
-  anim2.addFrame(1.0).marginLeft = '1';
-  anim2.start(e, new Duration(seconds: 5));
+  void start(e) {
+    anim.start(target,
+        new Duration(seconds: 5),
+        iterationCount: 1.5);//.onEnd.then(start);
+  }
+  start(null);
 }
